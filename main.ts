@@ -4,9 +4,9 @@ import cors from 'cors';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-import { historyRouter } from './routes/history/history.route';
-import { translateRouter } from './routes/translate/translate.route';
-import { config } from './config/config';
+import { historyRouter } from './src/routes/history/history.route';
+import { translateRouter } from './src/routes/translate/translate.route';
+import { config } from './src/config/config';
 
 export const app = express();
 
