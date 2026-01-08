@@ -1,0 +1,1 @@
+export const DB_FILE = 'database.sqlite';
