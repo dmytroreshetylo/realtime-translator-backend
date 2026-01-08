@@ -1,13 +1,12 @@
 import * as sqlite3 from 'sqlite3';
-import { DB_FILE } from '../shared/constants/db-name.constant';
 import { PaginatedResult } from '../shared/models/paginated-result.model';
 import { DbFilters } from '../shared/models/db-filters.model';
 
 export class DatabaseService {
-  private db: sqlite3.Database;
+  static db: sqlite3.Database;
 
   constructor(dbFile: string) {
-    this.db = new sqlite3.Database(`./${ dbFile }`, (err) => {
+    DatabaseService.db = new sqlite3.Database(`./${ dbFile }`, (err) => {
       if (err) {
         console.error('Невдале зʼєднання', err);
       }
@@ -40,13 +39,13 @@ export class DatabaseService {
   `;
 
     return new Promise((resolve, reject) => {
-      this.db.get(countQuery, values, (err, countRow) => {
+      DatabaseService.db.get(countQuery, values, (err, countRow) => {
         if (err) {
           reject(err);
           return;
         }
 
-        this.db.all(
+        DatabaseService.db.all(
           dataQuery,
           [...values, limit, offset],
           (err, rows) => {
@@ -85,7 +84,7 @@ export class DatabaseService {
     `;
 
     return new Promise((resolve, reject) => {
-      this.db.run(query, values, (err) => {
+      DatabaseService.db.run(query, values, (err) => {
         if (err) {
           reject(err);
         } else {
@@ -97,7 +96,7 @@ export class DatabaseService {
 
   close(): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.db.close((err) => {
+      DatabaseService.db.close((err) => {
         if (err) reject(err);
         else resolve();
       });
@@ -135,5 +134,3 @@ export class DatabaseService {
   }
 
 }
-
-export const databaseService = new DatabaseService(DB_FILE);
