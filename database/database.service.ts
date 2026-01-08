@@ -1,12 +1,13 @@
 import * as sqlite3 from 'sqlite3';
 import { PaginatedResult } from '../shared/models/paginated-result.model';
 import { DbFilters } from '../shared/models/db-filters.model';
+import { config } from '../config/config';
 
 export class DatabaseService {
   static db: sqlite3.Database;
 
-  constructor(dbFile: string) {
-    DatabaseService.db = new sqlite3.Database(`./${ dbFile }`, (err) => {
+  constructor() {
+    DatabaseService.db = new sqlite3.Database(`./${ config.dbFile }`, (err) => {
       if (err) {
         console.error('Невдале зʼєднання', err);
       }

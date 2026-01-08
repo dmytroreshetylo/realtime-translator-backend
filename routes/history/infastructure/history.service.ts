@@ -1,5 +1,4 @@
 import { DatabaseService } from '../../../database/database.service';
-import { DB_FILE } from '../../../shared/constants/db-name.constant';
 
 export class HistoryService extends DatabaseService {
   getMostPopularOriginalLanguageByUserUUID(userUUID: string): Promise<string | null> {
@@ -24,4 +23,4 @@ export class HistoryService extends DatabaseService {
   }
 }
 
-export const historyService = new HistoryService(DB_FILE);
+export const historyService = new HistoryService();
