@@ -10,6 +10,7 @@
     "serialize-db": "ts-node ./database/serialize-db.ts"
   },
   "dependencies": {
+    "@vitalets/google-translate-api": "^9.2.1",
     "body-parser": "^2.2.2",
     "cors": "^2.8.5",
     "express": "^5.2.1",
