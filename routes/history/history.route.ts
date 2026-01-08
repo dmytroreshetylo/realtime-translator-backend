@@ -14,7 +14,7 @@ historyRouter.post('/list', async(req, res) => {
     dto = validatePaginatedList(req.body);
   }
   catch (error) {
-    res.status(400).json(JSON.stringify((error as Error).message));
+    res.status(400).json({ message: (error as Error).message });
     return;
   }
 
@@ -27,10 +27,10 @@ historyRouter.post('/list', async(req, res) => {
       { userUUID: uuid } satisfies Partial<HistoryModel>
     );
 
-    res.status(200).json(JSON.stringify(result));
+    res.status(200).json(result);
   }
   catch (error) {
-    res.status(500).json(JSON.stringify('Невідома помилка. спробуйте пізніше'));
+    res.status(500).json({ message: 'Невідома помилка. спробуйте пізніше' });
   }
 });
 
@@ -39,8 +39,8 @@ historyRouter.get('/most-popular-original-language', async (req, res) => {
 
   try {
     const result = await historyService.getMostPopularOriginalLanguageByUserUUID(uuid);
-    res.status(200).json(JSON.stringify(result));
+    res.status(200).json(result);
   } catch (error) {
-    res.status(500).json(JSON.stringify('Невідома помилка. спробуйте пізніше'));
+    res.status(500).json({ message: 'Невідома помилка. спробуйте пізніше' });
   }
 });

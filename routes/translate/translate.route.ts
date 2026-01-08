@@ -15,7 +15,7 @@ translateRouter.post('/', async(req, res) => {
     dto = validateTranslateDto(req.body);
   }
   catch (err) {
-    res.status(400).send((err as Error).message);
+    res.status(400).send({ message: (err as Error).message });
     return;
   }
 
@@ -23,7 +23,7 @@ translateRouter.post('/', async(req, res) => {
     const result = await translateService.translate(dto.text, dto.originalLanguage, dto.translateLanguage);
 
     if(!result) {
-      res.status(404).json(JSON.stringify('Переклад не знайдено'));
+      res.status(404).json({ message: 'Переклад не знайдено' });
       return;
     }
 
@@ -38,9 +38,9 @@ translateRouter.post('/', async(req, res) => {
         originalLanguage: dto.originalLanguage
       } satisfies Omit<HistoryModel, 'id'>);
 
-    res.status(200).json(JSON.stringify(result));
+    res.status(200).json(result);
   }
   catch (err) {
-    res.status(500).json(JSON.stringify('Невідома помилка. спробуйте пізніше'));
+    res.status(500).json({ message: 'Невідома помилка. спробуйте пізніше' });
   }
 })
