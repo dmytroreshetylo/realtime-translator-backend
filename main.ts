@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 app.use((req, res, next) => {
   const uuid = req.header('uuid');
   if(!uuid) {
-    res.status(404).json(JSON.stringify('Не знайдено'));
+    res.status(404).json(JSON.stringify('Ідентифікаційний код не знайдено'));
     return;
   }
 
