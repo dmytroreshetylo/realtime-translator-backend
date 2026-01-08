@@ -6,7 +6,7 @@ import { historyService } from './infastructure/history.service';
 
 export const historyRouter = express.Router();
 
-historyRouter.get('/list', async(req, res) => {
+historyRouter.post('/list', async(req, res) => {
   let dto: PaginatedListModel;
   const uuid = req.header('uuid') as string;
 
