@@ -1,8 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import * as dotenv from 'dotenv';
-dotenv.config();
 
 import { historyRouter } from './src/routes/history/history.route';
 import { translateRouter } from './src/routes/translate/translate.route';
