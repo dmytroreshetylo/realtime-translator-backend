@@ -1,9 +1,9 @@
 import express from 'express';
 import { validateTranslateDto } from './application/validators/translate-dto.validator';
 import { translateService } from '../../services/translate.service';
-import { databaseService } from '../../database/database.service';
 import { HistoryModel } from '../history/infastructure/history.model';
 import { TranslateDto } from './application/dto/translate.dto';
+import { historyService } from '../history/infastructure/history.service';
 
 export const translateRouter = express.Router();
 
@@ -27,7 +27,7 @@ translateRouter.post('/', async(req, res) => {
       return;
     }
 
-    await databaseService.addItem(
+    await historyService.addItem(
       'history',
       {
         date: new Date(),
