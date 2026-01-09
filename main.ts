@@ -8,7 +8,7 @@ import { config } from './src/config/config';
 
 export const app = express();
 
-const port = 3000;
+const port = config.port;
 
 app.use(cors({ origin: config.origin }));
 app.use(express.json());
