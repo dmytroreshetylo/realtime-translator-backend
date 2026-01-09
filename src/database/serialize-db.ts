@@ -1,39 +1,45 @@
-import { DB_FILE } from '../shared/constants/db-name.constant';
-import * as sqlite3 from 'sqlite3';
-import * as path from 'path';
-import * as fs from 'fs';
+import { Pool } from 'pg';
+import { config } from '../config/config';
 
-function serializeDb(dbFile: string): void {
-  const fullPath = path.resolve(process.cwd(), dbFile);
+const pool = new Pool({ connectionString: config.dbURL });
 
-  const dirName = path.dirname(fullPath);
-  if (!fs.existsSync(dirName)) {
-    fs.mkdirSync(dirName, { recursive: true });
+const createHistoryTable = `
+    CREATE TABLE IF NOT EXISTS "history"
+    (
+        id
+        SERIAL
+        PRIMARY
+        KEY,
+        "userUUID"
+        VARCHAR
+(
+    255
+) NOT NULL,
+    "originalText" TEXT NOT NULL,
+    "translatedText" TEXT NOT NULL,
+    "originalLanguage" VARCHAR
+(
+    10
+) NOT NULL,
+    "translatedLanguage" VARCHAR
+(
+    10
+) NOT NULL,
+    date TIMESTAMP NOT NULL
+    );
+`;
+
+async function serializeDb() {
+  const client = await pool.connect();
+  try {
+    await client.query(createHistoryTable);
+    console.log('Таблиця "history" успішно створена.');
+  } catch (err) {
+    console.error('Помилка при створенні таблиці "history":', err);
+  } finally {
+    client.release();
+    await pool.end();
   }
-
-  const db = new sqlite3.Database(fullPath, (err) => {
-    if (err) {
-      console.error('Помилка відкриття бази даних', err);
-      throw err;
-    }
-  });
-
-  db.serialize(() => {
-    db.run(`
-      CREATE TABLE IF NOT EXISTS history (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        userUUID TEXT NOT NULL,
-        originalText TEXT NOT NULL,
-        translatedText TEXT NOT NULL,
-        originalLanguage TEXT NOT NULL,
-        translatedLanguage TEXT NOT NULL,
-        date INTEGER NOT NULL
-      );
-    `, () => {
-      db.close();
-    });
-
-  });
 }
 
-serializeDb(DB_FILE);
+serializeDb();

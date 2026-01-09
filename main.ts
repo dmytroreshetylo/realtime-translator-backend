@@ -30,7 +30,6 @@ app.use('/translate', translateRouter);
 if(port === 3000) {
   app.listen(port, () => {
     console.log(`Сервер запустився за порту ${port}`);
-    console.log(`Файл бази даних: ${config.dbFile}`);
   });
 }
 

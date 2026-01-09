@@ -4,11 +4,11 @@ import { PaginatedResult } from '../shared/models/paginated-result.model';
 import { DbFilters } from '../shared/models/db-filters.model';
 
 export class DatabaseService {
-  protected static pool: Pool;
+  private static pool: Pool;
 
   constructor() {
     if (!DatabaseService.pool) {
-      DatabaseService.pool = new Pool({ connectionString: config.dbURL });
+      DatabaseService.pool = new Pool(config.db);
     }
   }
 
@@ -22,14 +22,12 @@ export class DatabaseService {
     const offset = from;
 
     const { where, values } = this.buildWhereClause(filters);
-
     const dataQuery = `
         SELECT *
         FROM "${tableName}"
         ${where}
         LIMIT $${values.length + 1} OFFSET $${values.length + 2};
     `;
-
     const countQuery = `
         SELECT COUNT(*) as "totalCount"
         FROM "${tableName}"
@@ -39,12 +37,12 @@ export class DatabaseService {
     const client = await DatabaseService.pool.connect();
     try {
       const countResult = await client.query(countQuery, values);
-      const totalCount = Number(countResult.rows[0].totalCount);
-
       const dataResult = await client.query(dataQuery, [...values, limit, offset]);
-      const items = dataResult.rows as T[];
 
-      return { items, totalCount };
+      return {
+        items: dataResult.rows as T[],
+        totalCount: Number(countResult.rows[0].totalCount),
+      };
     } finally {
       client.release();
     }
@@ -62,10 +60,8 @@ export class DatabaseService {
     }
 
     const placeholders = keys.map((_, i) => `$${i + 1}`).join(', ');
-    const columns = keys.map(key => `"${key}"`).join(', ');
-
     const query = `
-        INSERT INTO "${tableName}" (${columns})
+        INSERT INTO "${tableName}" (${keys.map(key => `"${key}"`).join(', ')})
         VALUES (${placeholders});
     `;
 
@@ -76,6 +72,10 @@ export class DatabaseService {
     } finally {
       client.release();
     }
+  }
+
+  async close(): Promise<void> {
+    await DatabaseService.pool.end();
   }
 
   private buildWhereClause(
@@ -96,17 +96,7 @@ export class DatabaseService {
 
     return {
       where: `WHERE ${conditions.join(' AND ')}`,
-      values
+      values,
     };
-  }
-
-  async query<T>(queryString: string, params: any[] = []): Promise<T[]> {
-    const client = await DatabaseService.pool.connect();
-    try {
-      const result = await client.query(queryString, params);
-      return result.rows;
-    } finally {
-      client.release();
-    }
   }
 }

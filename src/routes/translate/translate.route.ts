@@ -1,9 +1,9 @@
 import express from 'express';
 import { validateTranslateDto } from './application/validators/translate-dto.validator';
 import { translateService } from '../../services/translate.service';
-import { HistoryModel } from '../history/infastructure/history.model';
+import { HistoryModel } from '../history/infrastructure/history.model';
 import { TranslateDto } from './application/dto/translate.dto';
-import { historyService } from '../history/infastructure/history.service';
+import { historyService } from '../history/infrastructure/history.service';
 
 export const translateRouter = express.Router();
 

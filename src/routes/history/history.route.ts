@@ -1,8 +1,8 @@
 import express from 'express';
 import { validatePaginatedList } from '../../shared/validators/paginated-list.validator';
-import { HistoryModel } from './infastructure/history.model';
+import { HistoryModel } from './infrastructure/history.model';
 import { PaginatedListModel } from '../../shared/models/paginated-list.model';
-import { historyService } from './infastructure/history.service';
+import { historyService } from './infrastructure/history.service';
 
 export const historyRouter = express.Router();
 
