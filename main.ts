@@ -27,9 +27,11 @@ app.use((req, res, next) => {
 app.use('/history', historyRouter);
 app.use('/translate', translateRouter);
 
-export const server = app.listen(port, () => {
-  console.log(`Сервер запустився за порту ${port}`);
-  console.log(`Файл бази даних: ${config.dbFile}`);
-});
+if(port === 3000) {
+  app.listen(port, () => {
+    console.log(`Сервер запустився за порту ${port}`);
+    console.log(`Файл бази даних: ${config.dbFile}`);
+  });
+}
 
 export default app;
