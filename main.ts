@@ -6,7 +6,7 @@ import { historyRouter } from './src/routes/history/history.route';
 import { translateRouter } from './src/routes/translate/translate.route';
 import { config } from './src/config/config';
 
-export const app = express();
+const app = express();
 
 const port = config.port;
 
@@ -31,3 +31,5 @@ export const server = app.listen(port, () => {
   console.log(`Сервер запустився за порту ${port}`);
   console.log(`Файл бази даних: ${config.dbFile}`);
 });
+
+export default app;
