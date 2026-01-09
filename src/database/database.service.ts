@@ -2,12 +2,15 @@ import * as sqlite3 from 'sqlite3';
 import { PaginatedResult } from '../shared/models/paginated-result.model';
 import { DbFilters } from '../shared/models/db-filters.model';
 import { config } from '../config/config';
+import path from 'path';
 
 export class DatabaseService {
   static db: sqlite3.Database;
 
   constructor() {
-    DatabaseService.db = new sqlite3.Database(`./${ config.dbFile }`, (err) => {
+    const fullPath = path.resolve(process.cwd(), config.dbFile);
+
+    DatabaseService.db = new sqlite3.Database(fullPath, (err) => {
       if (err) {
         console.error('Невдале зʼєднання', err);
       }
